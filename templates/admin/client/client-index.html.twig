@@ -3,15 +3,22 @@
 
 {% block body %}
 
-<div class="example-wrapper">
-    <h1>List des clients</h1>
-    <div class="heading">
-        <a href="{{ path('client.create') }}">Ajouter nouveau client</a>
+    <div class="example-wrapper">
+        <h1>List des clients</h1>
+        <div class="heading">
+            <a href="{{ path('client.create') }}">Ajouter nouveau client</a>
+        </div>
+        <ul>
+            {% for client in listClients %}
+                <li><a href="{{ path('client.edite',{id:client.id}) }}">{{ client.name }}</a>
+                    <span>
+                      <form action="{{ path('client.delete',{id:client.id}) }}" method="post">
+                          <input type="hidden" name="_method" value="DELETE">
+                             <button type="submit" >Supprimer</button>
+                      </form>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-    <ul>
-  {% for client in listClients %}
-      <li><a href="{{ path('client.edite',{id:client.id}) }}">{{ client.name }}</a></li>
-    {% endfor %}
-    </ul>
-</div>
 {% endblock %}
