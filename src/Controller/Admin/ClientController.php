@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/admin/clients')]
-class AdminClientController extends AbstractController
+class ClientController extends AbstractController
 {
     #[Route('/', name: 'clients')]
     public function index(Request $request, ClientRepository $repository): Response
@@ -52,7 +52,7 @@ class AdminClientController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edite', 'client.edite', methods: ['GET','POST'])]
+    #[Route('/{id}/edite', 'client.edite', methods: ['GET','POST'],requirements: ['id'=>Requirement::DIGITS])]
     public function edit(Client $client, Request $resquest, EntityManagerInterface $em)
     {
         $form = $this->createForm(ClientType::class, $client);

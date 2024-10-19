@@ -7,8 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
+// pour mettre un champs unique
+#[UniqueEntity('name', message: 'Un client portant le même nom existe déjà !')]
 class Client
 {
     #[ORM\Id]
@@ -17,8 +21,8 @@ class Client
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
+    #[Assert\NotBlank()]
+    private string $name = '';
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -26,7 +30,7 @@ class Client
     private ?string $logo = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private bool $active = false;
 
     /**
      * @var Collection<int, Project>
@@ -44,7 +48,7 @@ class Client
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -56,7 +60,7 @@ class Client
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }

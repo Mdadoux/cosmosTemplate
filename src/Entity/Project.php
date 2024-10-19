@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueEntity('title', message: 'Un projeet portant le même nom existe déjà !')]
 class Project
 {
     #[ORM\Id]
@@ -15,18 +17,20 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 5)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Slug invalide !')]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]

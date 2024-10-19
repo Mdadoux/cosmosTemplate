@@ -1,0 +1,27 @@
+{% extends 'admin/admin.html.twig' %}
+{% block title %}Les clients{% endblock %}
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Hello Catégories</h1>
+    <a href="{{path('category.create')}}">Ajouter une categorie</a>
+
+    {% if categories is not empty %}
+        <ul>
+            {% for category in categories %}
+            <li>
+                <span>{{ category.title }}</span>
+                <span>{{ category.description }}</span>
+                <a href="{{ path('category.edite',{ id:category.id }) }}">edite </a>
+                <form action="{{ path('category.delete',{ id:category.id }) }}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                     <button onclick="confirm('Sure de vouloir supprimer ?')">Supprimer</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Vous n'avez pas encore de categorie</p>
+    {% endif %}
+</div>
+{% endblock %}
