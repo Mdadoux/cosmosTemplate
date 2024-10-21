@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Entity\Client;
 use App\Entity\Project;
+use App\Entity\Technology;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -61,7 +62,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Portfolio', 'fas fa-archive')->setSubItems([
               MenuItem::linkToCrud('Catégories', 'far fa-folder', Category::class)->setAction(Crud::PAGE_INDEX),
               MenuItem::linkToCrud('Projets', 'fas fa-project-diagram', Project::class)->setAction(Crud::PAGE_INDEX),
-              MenuItem::linkToCrud('Technologies', 'fas fa-drafting-compass', Client::class)->setAction(Crud::PAGE_INDEX),
+              MenuItem::linkToCrud('Technologies', 'fas fa-drafting-compass', Technology::class)->setAction(Crud::PAGE_INDEX),
         ]);
     }
 }

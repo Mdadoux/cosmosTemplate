@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[UniqueEntity('title', message: 'Un projeet portant le même nom existe déjà !')]
+#[UniqueEntity('title', message: 'Un projet portant le même nom existe déjà !')]
+#[UniqueEntity('slug', message: 'Slug déjà prit')]
 class Project
 {
     #[ORM\Id]
@@ -17,6 +21,7 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
     #[Assert\Length(min: 5)]
     private ?string $title = null;
 
@@ -38,6 +43,23 @@ class Project
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Client $idClient = null;
+
+    #[ORM\ManyToMany(targetEntity: Technology::class, mappedBy: 'projects')]
+    private Collection $technologies;
+
+    /**
+     * @var Collection<int, ImgProject>
+     */
+
+    /* #[ORM\OneToMany(targetEntity: ImgProject::class, mappedBy: 'project_id')] */
+    #[ORM\OneToMany(targetEntity: ImgProject::class, mappedBy: 'project', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $imgProjects;
+
+    public function __construct()
+    {
+        $this->technologies = new ArrayCollection();
+        $this->imgProjects = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -124,6 +146,77 @@ class Project
     public function setIdClient(?Client $idClient): static
     {
         $this->idClient = $idClient;
+
+        return $this;
+    }
+
+    public function getTechnologies(): Collection
+    {
+        return $this->technologies;
+    }
+
+    public function addTechnology(Technology $technology): static
+    {
+        if (!$this->technologies->contains($technology)) {
+            $this->technologies->add($technology);
+            $technology->addProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnology(Technology $technology): static
+    {
+        if ($this->technologies->removeElement($technology)) {
+            $technology->removeProject($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return Collection<int, ImgProject>
+     */
+    public function getImgProjects(): Collection
+    {
+        return $this->imgProjects;
+    }
+
+    public function addImgProject(ImgProject $imgProject): static
+    {
+        if (!$this->imgProjects->contains($imgProject)) {
+            $this->imgProjects->add($imgProject);
+            $imgProject->setProjectId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImgProject(ImgProject $imgProject): static
+    {
+        if ($this->imgProjects->removeElement($imgProject)) {
+            // set the owning side to null (unless already changed)
+            if ($imgProject->getProjectId() === $this) {
+                $imgProject->setProjectId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProjectImageFile(): ?File
+    {
+        return $this->projectImageFile;
+    }
+
+    public function setProjectImageFile(?File $projectImageFile): static
+    {
+        $this->projectImageFile = $projectImageFile;
 
         return $this;
     }
