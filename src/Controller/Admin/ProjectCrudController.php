@@ -6,15 +6,12 @@ use App\Entity\Project;
 use App\Form\ImgProjectsType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-
 
 class ProjectCrudController extends AbstractCrudController
 {
@@ -25,8 +22,6 @@ class ProjectCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
-
         return [
             IdField::new('Id')->hideOnForm(),
             TextField::new('title', 'Titre du projet'),
@@ -34,10 +29,9 @@ class ProjectCrudController extends AbstractCrudController
             BooleanField::new('active'),
             AssociationField::new('idClient', 'Client'),
             TextEditorField::new('description'),
-            CollectionField::new('imgProjects','Images Projet')
+            CollectionField::new('imgProjects', 'Images Projet')
                 ->setEntryType(ImgProjectsType::class)
-                ->onlyOnForms()
-
+                ->onlyOnForms(),
         ];
     }
 
