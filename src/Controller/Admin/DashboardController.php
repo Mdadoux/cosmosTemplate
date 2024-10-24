@@ -60,9 +60,9 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         yield MenuItem::subMenu('Portfolio', 'fas fa-archive')->setSubItems([
-              MenuItem::linkToCrud('Catégories', 'far fa-folder', Category::class)->setAction(Crud::PAGE_INDEX),
-              MenuItem::linkToCrud('Projets', 'fas fa-project-diagram', Project::class)->setAction(Crud::PAGE_INDEX),
-              MenuItem::linkToCrud('Technologies', 'fas fa-drafting-compass', Technology::class)->setAction(Crud::PAGE_INDEX),
+            MenuItem::linkToCrud('Catégories', 'far fa-folder', Category::class)->setAction(Crud::PAGE_INDEX),
+            MenuItem::linkToCrud('Projets', 'fas fa-project-diagram', Project::class)->setAction(Crud::PAGE_INDEX),
+            MenuItem::linkToCrud('Technologies', 'fas fa-drafting-compass', Technology::class)->setAction(Crud::PAGE_INDEX),
         ]);
     }
 }
