@@ -52,7 +52,7 @@ class ClientController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edite', 'client.edite', methods: ['GET','POST'],requirements: ['id'=>Requirement::DIGITS])]
+    #[Route('/{id}/edite', 'client.edite', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function edit(Client $client, Request $resquest, EntityManagerInterface $em)
     {
         $form = $this->createForm(ClientType::class, $client);
@@ -76,6 +76,7 @@ class ClientController extends AbstractController
         $em->remove($client);
         $em->flush();
         $this->addFlash('success', 'Les infos client ont bien été Supprimés !');
+
         return $this->redirectToRoute('clients');
     }
 }
